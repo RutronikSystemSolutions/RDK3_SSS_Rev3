@@ -86,13 +86,6 @@ void GestureSensorTask(void *param)
 	TickType_t currentTime = xTaskGetTickCount()* (1000/configTICK_RATE_HZ);
 	gesture_data.timestamp = currentTime;
 
-    /*Initialize VCNL4035X01 Power Control Pin*/
-    result = cyhal_gpio_init(ARDU_ADC3, CYHAL_GPIO_DIR_OUTPUT, CYHAL_GPIO_DRIVE_STRONG, true);
-    if (result != CY_RSLT_SUCCESS)
-    {
-    	CY_ASSERT(0);
-    }
-
 	/*Configure the PCA9554 GPIO Expander*/
 	result = pca9554_configure();
     if (result != CY_RSLT_SUCCESS)

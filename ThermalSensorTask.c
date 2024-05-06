@@ -52,8 +52,15 @@ void ThermalSensorTask(void *param)
     	CY_ASSERT(0);
     }
 
+    /*Initialize D6T32L01A Power Control Pin*/
+    result = cyhal_gpio_init(ARDU_ADC3, CYHAL_GPIO_DIR_OUTPUT, CYHAL_GPIO_DRIVE_STRONG, true);
+    if (result != CY_RSLT_SUCCESS)
+    {
+    	CY_ASSERT(0);
+    }
+
     /*Initialize the D6T32L01A */
-    vTaskDelay(pdMS_TO_TICKS(200));
+    vTaskDelay(pdMS_TO_TICKS(400));
     d6t_rslt = d6t32_init();
     if(d6t_rslt != D6T_OK)
     {
