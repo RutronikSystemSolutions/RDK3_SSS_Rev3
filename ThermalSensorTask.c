@@ -81,7 +81,15 @@ void ThermalSensorTask(void *param)
         	/*Check if the temperature values were read without any errors*/
             if(d6t_rslt != D6T_OK)
             {
+            	/*Try to recover*/
             	memset(rbuf, 0x00, sizeof(rbuf));
+            	cyhal_gpio_write((cyhal_gpio_t)ARDU_ADC3, false);
+            	vTaskDelay(pdMS_TO_TICKS(100));
+            	cyhal_gpio_write((cyhal_gpio_t)ARDU_ADC3, true);
+            	vTaskDelay(pdMS_TO_TICKS(400));
+            	d6t32_init();
+            	vTaskDelay(pdMS_TO_TICKS(50));
+            	D6T_getvalue(rbuf, &ptat, pix_data);
             }
     	}
     	else
