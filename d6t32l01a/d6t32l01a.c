@@ -20,7 +20,7 @@ static uint32_t d6t32_read(uint8_t devAddr, uint8_t regAddr, uint8_t *data, int 
 	result = cyhal_i2c_master_write( &I2C_scb1, (uint16_t)devAddr, &regAddr, 1, D6T_I2C_TIMEOUT, false );
     if (result != CY_RSLT_SUCCESS)
     {
-    	return D6T_READ_FAIL;
+    	return D6T_WRITE_FAIL;
     }
 
 	result = (int8_t)cyhal_i2c_master_read(&I2C_scb1,(uint16_t)devAddr, data, (uint16_t)length, D6T_I2C_TIMEOUT, true);
@@ -105,14 +105,18 @@ int D6T_getvalue(uint8_t *buf, float *ptat, float *pix_data)
 		{
 			break;
 		}
-		else if (ret == 23)
-		{  /* write error */
-			d6t32_delay_ms(60);
+		else
+		{
+			return (int)ret;
 		}
-		else if (ret == 24)
-		{  /* read error */
-			d6t32_delay_ms(60);
-		}
+//		else if (ret == 23)
+//		{  /* write error */
+//			d6t32_delay_ms(60);
+//		}
+//		else if (ret == 24)
+//		{  /* read error */
+//			d6t32_delay_ms(60);
+//		}
 	}
 	if(!D6T_checkPEC(buf, N_READ - 1))
 	{
