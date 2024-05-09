@@ -88,13 +88,12 @@ void ThermalSensorTask(void *param)
             	cyhal_gpio_write((cyhal_gpio_t)ARDU_ADC3, true);
             	vTaskDelay(pdMS_TO_TICKS(400));
             	d6t32_init();
-            	vTaskDelay(pdMS_TO_TICKS(50));
-            	D6T_getvalue(rbuf, &ptat, pix_data);
             }
     	}
     	else
     	{
     		vTaskDelay(pdMS_TO_TICKS(50));
+    		cyhal_gpio_toggle(LED3);
     	}
 	}
 }

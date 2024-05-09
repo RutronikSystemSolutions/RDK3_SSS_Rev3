@@ -97,27 +97,34 @@ int D6T_getvalue(uint8_t *buf, float *ptat, float *pix_data)
 	uint32_t ret;
 	int16_t itemp;
 
-	memset(buf, 0, N_READ);
-	for (i = 0; i < 10; i++)
+	//memset(buf, 0, N_READ);
+//	for (i = 0; i < 10; i++)
+//	{
+//		ret = d6t32_read(D6T_ADDR, D6T_CMD, buf, N_READ);
+//		if (ret == 0)
+//		{
+//			break;
+//		}
+//		else
+//		{
+//			return (int)ret;
+//		}
+////		else if (ret == 23)
+////		{  /* write error */
+////			d6t32_delay_ms(60);
+////		}
+////		else if (ret == 24)
+////		{  /* read error */
+////			d6t32_delay_ms(60);
+////		}
+//	}
+
+	ret = d6t32_read(D6T_ADDR, D6T_CMD, buf, N_READ);
+	if (ret != 0)
 	{
-		ret = d6t32_read(D6T_ADDR, D6T_CMD, buf, N_READ);
-		if (ret == 0)
-		{
-			break;
-		}
-		else
-		{
-			return (int)ret;
-		}
-//		else if (ret == 23)
-//		{  /* write error */
-//			d6t32_delay_ms(60);
-//		}
-//		else if (ret == 24)
-//		{  /* read error */
-//			d6t32_delay_ms(60);
-//		}
+		return (int)ret;
 	}
+
 	if(!D6T_checkPEC(buf, N_READ - 1))
 	{
 		return D6T_PEC_FAIL;

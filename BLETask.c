@@ -38,7 +38,7 @@
 
 #define CUSTOM_DESCR_HANDLE						cy_ble_customsConfig.attrInfo[0].customServInfo[0].customServCharDesc[0]
 #define CUSTOM_CHAR_HANDLE						cy_ble_customsConfig.attrInfo[0].customServInfo[0].customServCharHandle
-#define TARGET_BDADDR       					{{0xFF, 0xBB, 0xAA, 0x50, 0xA0, 0x00}, 0}
+#define TARGET_BDADDR       					{{0xFF, 0xBB, 0xAA, 0x50, 0xA0, 0x01}, 0}
 #define BLE_INTERRUPT_PRIORITY                  (3u)
 #define BLE_PROCESS_EVENTS                      (3u)
 #define CONN_INTERVAL_MULTIPLIER                (1.25f)

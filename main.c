@@ -113,7 +113,7 @@ int main(void)
     }
 
     /* Start Thermal Sensor Task */
-    xTaskCreate(ThermalSensorTask, "thermal task", configMINIMAL_STACK_SIZE*3, NULL, configMAX_PRIORITIES - 4, &ThermalSensorTaskHandle);
+    xTaskCreate(ThermalSensorTask, "thermal task", configMINIMAL_STACK_SIZE*2, NULL, configMAX_PRIORITIES - 4, &ThermalSensorTaskHandle);
     if(ThermalSensorTaskHandle == NULL)
     {
     	printf("Error: could not create thermal task.\r\n");
@@ -279,7 +279,6 @@ cy_rslt_t hardware_init (void)
 	    	}
 		}
     }
-
 
     printf("\x1b[2J\x1b[;H");
     printf("hardware initialization PASS.\r\n");
