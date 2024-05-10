@@ -77,6 +77,8 @@ cyhal_i2c_cfg_t i2c_scb3_cfg =
 	    .frequencyhal_hz = 1000000UL,
 };
 
+cyhal_crc_t crc_obj;
+
 cy_rslt_t hardware_init (void);
 
 int main(void)
@@ -223,6 +225,13 @@ cy_rslt_t hardware_init (void)
     	return result;
     }
     result = cyhal_i2c_configure(&I2C_scb3, &i2c_scb3_cfg);
+    if (result != CY_RSLT_SUCCESS)
+    {
+    	return result;
+    }
+
+    /* Initialize the CRC Generator */
+    result = cyhal_crc_init(&crc_obj);
     if (result != CY_RSLT_SUCCESS)
     {
     	return result;

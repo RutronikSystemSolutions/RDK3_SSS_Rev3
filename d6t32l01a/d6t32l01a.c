@@ -11,6 +11,29 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
+/* Using  Algorithm */
+#define CRC_BITLEN          (8u)
+#define CRC_POLYNOMIAL      (0x07u)
+#define CRC_LFSR_SEED       (0x6Bu)
+#define CRC_DATA_REVERSE    (0)
+#define CRC_DATA_XOR        (0)
+#define CRC_REM_REVERSE     (0)
+#define CRC_REM_XOR         (0x00u)
+
+extern cyhal_crc_t crc_obj;
+
+/* Set CRC algorithm parameters */
+crc_algorithm_t bit8_2f_algo =
+{
+    .width = CRC_BITLEN,
+    .polynomial = CRC_POLYNOMIAL,
+    .lfsrInitState = CRC_LFSR_SEED,
+    .dataReverse = CRC_DATA_REVERSE,
+    .dataXor = CRC_DATA_XOR,
+    .remReverse = CRC_REM_REVERSE,
+    .remXor = CRC_REM_XOR
+};
+
 /*RDK3 I2C Read/Write Implementation*/
 extern cyhal_i2c_t I2C_scb1;
 static uint32_t d6t32_read(uint8_t devAddr, uint8_t regAddr, uint8_t *data, int length)
@@ -51,18 +74,18 @@ static void d6t32_delay_ms(uint32_t msec)
 	vTaskDelay(pdMS_TO_TICKS(msec));
 }
 
-static unsigned char calc_crc(unsigned char data)
-{
-	int index;
-	unsigned char temp;
-	for(index=0; index<8; index++)
-	{
-		temp = data;
-		data <<= 1;
-		if(temp & 0x80) data ^= 0x07;
-	}
-	return data;
-}
+//static unsigned char calc_crc(unsigned char data)
+//{
+//	int index;
+//	unsigned char temp;
+//	for(index=0; index<8; index++)
+//	{
+//		temp = data;
+//		data <<= 1;
+//		if(temp & 0x80) data ^= 0x07;
+//	}
+//	return data;
+//}
 
 static int16_t conv8us_s16_le(uint8_t *buf, int n)
 {
@@ -74,14 +97,18 @@ static int16_t conv8us_s16_le(uint8_t *buf, int n)
 
 static int D6T_checkPEC(uint8_t *buf, int pPEC)
 {
-	unsigned char crc;
-	int i;
-	crc = calc_crc( 0x15 );
-	for(i=0; i<pPEC; i++)
-	{
-		crc = calc_crc(buf[i] ^ crc );
-	}
-	return (crc == buf[pPEC]);
+	uint32_t crc_hw = 0;
+
+	/* Initialize the CRC algorithm parameters */
+	(void)cyhal_crc_start(&crc_obj, &bit8_2f_algo);
+
+	/* Compute CRC */
+	(void)cyhal_crc_compute(&crc_obj, buf, pPEC);
+
+	/* Finish computation */
+	(void)cyhal_crc_finish(&crc_obj, &crc_hw);
+
+	return (crc_hw == buf[pPEC]);
 }
 
 uint32_t d6t32_init(void)
@@ -96,28 +123,6 @@ int D6T_getvalue(uint8_t *buf, float *ptat, float *pix_data)
 	int i;
 	uint32_t ret;
 	int16_t itemp;
-
-	//memset(buf, 0, N_READ);
-//	for (i = 0; i < 10; i++)
-//	{
-//		ret = d6t32_read(D6T_ADDR, D6T_CMD, buf, N_READ);
-//		if (ret == 0)
-//		{
-//			break;
-//		}
-//		else
-//		{
-//			return (int)ret;
-//		}
-////		else if (ret == 23)
-////		{  /* write error */
-////			d6t32_delay_ms(60);
-////		}
-////		else if (ret == 24)
-////		{  /* read error */
-////			d6t32_delay_ms(60);
-////		}
-//	}
 
 	ret = d6t32_read(D6T_ADDR, D6T_CMD, buf, N_READ);
 	if (ret != 0)
