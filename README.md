@@ -10,7 +10,7 @@ This is a ModusToolbox™ project for the SSS3 Rev3 demonstration kit featuring 
 
 1. The [Python](https://www.python.org/) has to be installed manually on Windows OS.
 2. Make sure the Python installation is added to the path variable. 
-3. Use this command to install the [CySecureTools](https://pypi.org/project/cysecuretools/) package:
+3. Use this command to install the [cysecuretools](https://pypi.org/project/cysecuretools/) package:
 
 ```
 pip install cysecuretools
