@@ -154,6 +154,7 @@ int main(void)
     	CY_ASSERT(0);
     }
 
+    CyDelay(500);
     vTaskStartScheduler();
     /* RTOS scheduler exited */
     /* Halt the CPU if scheduler exits */

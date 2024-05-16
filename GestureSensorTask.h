@@ -18,14 +18,11 @@
 /*Gesture Samples Frame Size*/
 #define GESTURE_FRAME_SIZE	10
 
-/*Gesture Frames Skipping*/
-#define GESTURE_FRAME_SKIP	40
-
 /*Gesture Hold Time in milliseconds*/
 #define GESTURE_HOLD_MS		400
 
 /*The Moving Average of the Gesture Samples*/
-#define MOV_AVERAGE			2
+#define MOV_AVERAGE			3
 
 /*Gesture Debugging Information Enable/Disable*/
 #define STD_DEBUG_EN		0
