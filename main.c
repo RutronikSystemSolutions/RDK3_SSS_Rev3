@@ -54,6 +54,7 @@
 #include "cy_pdl.h"
 #include "cyhal.h"
 #include "cybsp.h"
+#include "watchdog.h"
 #include "psram.h"
 #include "dio59020.h"
 #include "cy_retarget_io.h"
@@ -155,6 +156,7 @@ int main(void)
     }
 
     CyDelay(500);
+    watchdog_feed();
     vTaskStartScheduler();
     /* RTOS scheduler exited */
     /* Halt the CPU if scheduler exits */
@@ -172,6 +174,8 @@ cy_rslt_t hardware_init (void)
     {
     	return result;
     }
+
+    watchdog_init();
 
     /*Enable QSPI PSRAM in XIP Mode*/
     psram_init();

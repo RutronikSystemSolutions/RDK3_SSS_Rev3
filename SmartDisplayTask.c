@@ -13,6 +13,7 @@
 #include "d6t32l01a.h"
 #include "image_lut.h"
 #include "arm_math.h"
+#include "watchdog.h"
 
 TaskHandle_t SmartDisplayTaskHandle = NULL;
 
@@ -45,6 +46,7 @@ void SmartDisplayTask(void *param)
 	float thermal_diff = 0;
 	int32_t iron_map_index = 0;
 	uint32_t ulNotifiedValue;
+	static _Bool wdt_deinit = false;
 
 	/*Reset the Display*/
 	ResetDisplay();
@@ -66,6 +68,13 @@ void SmartDisplayTask(void *param)
 	for(;;)
 	{
 		 xTaskNotifyWait( 0x00, 0xFF, &ulNotifiedValue, portMAX_DELAY);
+
+		 if(!wdt_deinit)
+		 {
+			 watchdog_stop();
+			 watchdog_deinit();
+			 wdt_deinit = true;
+		 }
 
 		 /*Drawing thermal image*/
 	     if( ( ulNotifiedValue & sigTHERMO ) != 0 )
